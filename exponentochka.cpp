@@ -11,11 +11,31 @@ void SetData(int k, mytype* mas, int first)
 		mas[i] = 0;
 	}
 }
-void print_e(mytype* e, int sizec)
+void print_e(mytype* e, int sizec, int B)
 {
+	int k = 0;
 	cout << e[0] << ",";
 	for (int i = 1; i < sizec; i++)
-		cout << e[i];
+	{
+		if (e[i] < B/10)
+		{
+			k = B/10;
+			while (k > 1)
+			{
+				cout << "0";
+				k = k / 10;
+				if (k < e[i])
+				{
+					cout << e[i];
+					break;
+				}
+				
+
+			}
+		}
+		else
+			cout << e[i];
+	}
 }
 
 bool IsZero(int sizec, mytype* mas)
@@ -26,7 +46,7 @@ bool IsZero(int sizec, mytype* mas)
 	return(true);
 }
 
-void Div(int sizec, mytype* mas, int l)
+void Div(int sizec, mytype* mas, int l, int B)
 {
 	//print_e(mas, sizec);
 	//cout << endl<<l<<endl;
@@ -34,7 +54,7 @@ void Div(int sizec, mytype* mas, int l)
 	long long deli = 0;
 	for (i = 0; i < sizec; i++)
 	{
-		deli = deli * 10 + mas[i];
+		deli = deli * B + mas[i];
 		if (deli == 0)
 			mas[i] = 0;
 		else
@@ -52,7 +72,7 @@ void Div(int sizec, mytype* mas, int l)
 	//cout << endl << endl;
 }
 
-void Add(int sizec, mytype* e, mytype* mas)
+void Add(int sizec, mytype* e, mytype* mas,int B)
 {
 	//print_e(mas, sizec);
 	//cout << endl;
@@ -61,11 +81,11 @@ void Add(int sizec, mytype* e, mytype* mas)
 	int oldadded = 0, newadded=0;
 	for (int i = sizec - 1; i >= 0; i--)
 	{
-		if (mas[i] + e[i] + oldadded > 9)
-			newadded = (mas[i] + e[i] + oldadded) / 10;
+		if (mas[i] + e[i] + oldadded > B-1)
+			newadded = (mas[i] + e[i] + oldadded) / B;
 		else
 			newadded = 0;
-		e[i]= (mas[i] + e[i] + oldadded) % 10;
+		e[i]= (mas[i] + e[i] + oldadded) % B;
 		oldadded = newadded;
 	}
 	//print_e(e, sizec);
@@ -75,7 +95,7 @@ void Add(int sizec, mytype* e, mytype* mas)
 
 int main()
 {
-	int B = 10;
+	int B = 100;
 	int N = 1000;
 	int loga = log10(B);
 	int K = (N / loga) + 1;
@@ -86,13 +106,13 @@ int main()
 	SetData(K, uk, 1);
 	while (!IsZero(K, uk))
 	{
-		Add(K, e, uk);
-		Div(K, uk, k);
+		Add(K, e, uk,B);
+		Div(K, uk, k,B);
 		k++;
 		//cout << e[0]<<e[1]<<e[2] << endl;
 	}
 	e[0] = e[0] - 1;
-	print_e(e, K);
+	print_e(e, K,B);
 	delete[] uk;
 	delete[] e;
 	return(0);
